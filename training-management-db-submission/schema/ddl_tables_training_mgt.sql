@@ -11,6 +11,7 @@ CREATE TABLE Topic(
     FOREIGN KEY (Course_id) REFERENCES Courses(Course_id)
     ON DELETE SET NULL
 );
+
 CREATE TABLE Trainer(
 	trainer_id INT PRIMARY KEY,
     trainer_name VARCHAR(50)
@@ -22,11 +23,13 @@ CREATE TABLE Batch(
     Course_id INT,
     FOREIGN KEY (Course_id) REFERENCES Courses(Course_id)
 );
+
+
 CREATE TABLE Candidate(
 	candidate_id INT PRIMARY KEY,
     candidate_name VARCHAR(50),
     email VARCHAR(50),
-    phone_no VARCHAR(10) 
+    phone_no VARCHAR(15) 
 );
 CREATE TABLE Assignment(
 	assign_id INT PRIMARY KEY,
@@ -37,6 +40,8 @@ CREATE TABLE Assignment(
     FOREIGN KEY(batch_id) REFERENCES Batch(batch_id)
     ON DELETE SET NULL
 );
+
+
 CREATE TABLE cand_status(
 	candidate_id INT,
     batch_id INT,
@@ -47,6 +52,7 @@ CREATE TABLE cand_status(
     FOREIGN KEY (candidate_id) REFERENCES Candidate(candidate_id)
     ON DELETE CASCADE
 );
+
 CREATE TABLE submit(
 	candidate_id INT,
     assign_id INT,
@@ -67,3 +73,6 @@ CREATE TABLE Trainer_batch(
     FOREIGN KEY(trainer_id) REFERENCES Trainer(trainer_id)
     ON DELETE CASCADE
 );
+
+
+RENAME TABLE Courses TO Course;
