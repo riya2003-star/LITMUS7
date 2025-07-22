@@ -1,8 +1,9 @@
-package employeemanager;
+package com.litmus7.employee.java;
 
 import java.sql.Date;
 
 public class Employee {
+
 	private int empId;
     private String firstName;
     private String lastName;
@@ -32,4 +33,5 @@ public class Employee {
     public String getDepartment() { return department; }
     public double getSalary() { return salary; }
     public Date getJoinDate() { return joinDate; }
+
 }
