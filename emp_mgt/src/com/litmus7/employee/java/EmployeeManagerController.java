@@ -15,7 +15,7 @@ import java.util.Scanner;
 
 
 public class EmployeeManagerController {
-
+	List<Response> response=new ArrayList<Response>();
 	static {
     	try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -32,7 +32,7 @@ public class EmployeeManagerController {
     }
 
     public List<Employee> readCSV(String filePath) {
-        List<Employee> employees = new ArrayList<>();
+    	List<Employee> employees = new ArrayList<>();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
         try (Scanner scanner = new Scanner(new FileReader(filePath))) {
@@ -43,8 +43,9 @@ public class EmployeeManagerController {
                 if (lineNum == 1) continue; // Skip header
 
                 String[] data = line.split(",");
-                new Validate();
-				if (Validate.isValidRecord(data)) {
+                Response response1=Validate.isValidRecord(data);
+				if (response1.getStatusCode() !=200) {
+					response.add(response1);
                     continue;
                 }
 
@@ -74,11 +75,8 @@ public class EmployeeManagerController {
 
 
 
-    public Response writeDataToDB(String csvPath) {
-    	Response response=new Response();
-    	response.errorMessage="Data imported successfully";
-        response.statusCode=200;
-        try (Connection conn = getConnection()) {
+    public List<Response> writeDataToDB(String csvPath) {
+    	try (Connection conn = getConnection()) {
         	String checkQuery = "SELECT COUNT(*) FROM employee WHERE emp_id = ?";
             String insertQuery = "INSERT INTO employee (emp_id, first_name, last_name, email, phone, department, salary, join_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement checkStmt = conn.prepareStatement(checkQuery);
@@ -90,7 +88,8 @@ public class EmployeeManagerController {
                 rs.next();
 
                 if (rs.getInt(1) > 0) {
-                    System.out.println("Employee ID " + emp.getEmpId() + " already exists. Skipping...");
+                    //System.out.println("Employee ID " + emp.getEmpId() + " already exists. Skipping...");
+                    response.add(new Response(100,"EmployeeID already exists. Skipping..."));
                     continue;
                 }
 
@@ -104,12 +103,12 @@ public class EmployeeManagerController {
                 insertStmt.setDate(8, emp.getJoinDate());
 
                 insertStmt.executeUpdate();
-                System.out.println("Inserted Employee ID: " + emp.getEmpId());
+                //System.out.println("Inserted Employee ID: " + emp.getEmpId());
+                response.add(new Response(101,"Inserted an employee"+ emp.getEmpId()));
             }
         } catch (SQLException e) {
-            System.err.println("DB Error: " + e.getMessage());
-            response.errorMessage="Database Error";
-            response.statusCode=500;
+            //System.err.println("DB Error: " + e.getMessage());
+            response.add(new Response(102,"Database Error"));
         }
         return response;
     }
