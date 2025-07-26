@@ -1,4 +1,7 @@
 emp_id,first_name,last_name,email,phone,deparment,salary,join_date
-101,John,Doe,john.doe@example.com,9876543210,Engineering,75000,2021-06-15
-102,Jane,Smith,jane.smith@example.com,9876501234,Marketing,65000,2022-01-10
-103,Robert,Brown,robert.brown@example.com,9876512345,Sales,72000,2020-12-01
+101,John,Doe,john.doe@example.com,9876543210,Engineering,75000,2019-05-15
+102,Jane,Smith,jane.smith@example.com,9876501234,Marketing,65000,2021-04-02
+103,Robert,Brown,robert.brown@example.com,9876512345,Sales,72000,2022-11-18
+104,Kevin,Jacob,kevinjacob@gmail.com,9876540321,,15000,2018-05-25
+105,Manu,Kiran,manu@example.com,7662697627,,80000,2011-02-1
+106,Meera,Mathew,mathew@example.com,8919973933,,30000,2023-01-23
