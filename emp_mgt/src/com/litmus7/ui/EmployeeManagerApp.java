@@ -8,7 +8,7 @@ public class EmployeeManagerApp {
 
 	public static <T> void main(String[] args) {
         EmployeeManagerController controller = new EmployeeManagerController();
-        String csvFilePath = "E:\\Users\\johns\\LITMUS\\LITMUS7\\java_emp_mgt\\employees.csv";
+        String csvFilePath = "E:\\Users\\johns\\LITMUS\\LITMUS7\\emp_mgt\\employees.csv";
         List<Response<String>> responseList=controller.writeDataToDB(csvFilePath);
         for (Response<String> response : responseList) {
             System.out.println("Status Code: " + response.getStatusCode());
