@@ -1,8 +1,7 @@
-<<<<<<<< HEAD:emp_mgt/src/com/litmus7/employee/java/Employee.java
-package com.litmus7.employee.java;
-========
+
 package com.litmus7.dto;
->>>>>>>> 940d752 (updated):java_emp_mgt/src/com/litmus7/dto/Employee.java
+
+
 
 import java.sql.Date;
 
