@@ -1,25 +1,32 @@
 package com.litmus7.controller;
 
+import java.util.List;
+
+import com.litmus7.dto.Employee;
 import com.litmus7.dto.Response;
 import com.litmus7.service.EmployeeManagerService;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class EmployeeManagerController {
+	private EmployeeManagerService service=new EmployeeManagerService();
 	
-	List<Response<String>> response=new  ArrayList<>();
-    public List<Response<String>> writeDataToDB(String csvPath) {
-    	if(csvPath == null || !csvPath.toLowerCase().endsWith(".csv")) {
-    		response.add(new Response<>(100,"It is not CSV file"));
-    	}else {
-    		EmployeeManagerService service=new EmployeeManagerService();
-        	if(service.writeDataToDB(csvPath))
-        		response.add(new Response<>(200,"suceess"));
-        	else
-        		response.add(new Response<>(100,"failed"));
-    	}
+    public Response<Integer> writeDataToDB(String csvPath) {
+    	if(csvPath == null)
+    		return new Response<Integer>(100,"the file is null");
+    	if(!csvPath.toLowerCase().endsWith(".csv"))
+    		return new Response<Integer>(100,"It is not a CSV file");
+    	int countInsertedEmployees=service.writeDataToDB(csvPath);
+    	if(countInsertedEmployees>0)
+    		return (new Response<Integer>(200,"suceess",countInsertedEmployees));
+    	else
+    		return (new Response<>(100,"failed"));
     	   	
-        return response;
+    }
+    public Response <List<Employee>> getAllEmployees(){
+    	List<Employee> employees=service.getAllEmployees();
+    	if(employees==null) 
+    		return new Response<List<Employee>>(100,"Could'nt get the list of employees");
+    	else
+    		return new Response<List<Employee>>(200,"Success",employees);
     }
 }

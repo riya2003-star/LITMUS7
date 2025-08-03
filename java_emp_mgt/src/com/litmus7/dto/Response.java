@@ -18,7 +18,7 @@ public class Response <T>{
 		this.message=message;
 		this.data=data;
 	}
-	
+
 	public int getStatusCode() {
 	    return statusCode;
 	}

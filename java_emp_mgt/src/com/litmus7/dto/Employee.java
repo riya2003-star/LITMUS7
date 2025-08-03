@@ -1,13 +1,10 @@
-
 package com.litmus7.dto;
-
-
 
 import java.sql.Date;
 
 public class Employee {
 
-	private int empId;
+	private int employeeId;
     private String firstName;
     private String lastName;
     private String email;
@@ -15,10 +12,14 @@ public class Employee {
     private String department;
     private double salary;
     private Date joinDate;
+    
+    public Employee() {
+		// TODO Auto-generated constructor stub
+	}
 
-    public Employee(int empId, String firstName, String lastName, String email, String phone,
+    public Employee(int employeeId, String firstName, String lastName, String email, String phone,
                     String department, double salary, Date joinDate) {
-        this.empId = empId;
+        this.employeeId = employeeId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -28,7 +29,7 @@ public class Employee {
         this.joinDate = joinDate;
     }
 
-    public int getEmpId() { return empId; }
+	public int getEmployeeId() { return employeeId; }
     public String getFirstName() { return firstName; }
     public String getLastName() { return lastName; }
     public String getEmail() { return email; }
@@ -36,5 +37,7 @@ public class Employee {
     public String getDepartment() { return department; }
     public double getSalary() { return salary; }
     public Date getJoinDate() { return joinDate; }
+    
+    
 
 }

@@ -1,30 +1,25 @@
 package com.litmus7.service;
 
-import java.sql.Connection;
 import java.sql.Date;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.litmus7.dao.EmployeeDao;
 import com.litmus7.dto.Employee;
-import com.litmus7.ui.DataBaseConnection;
-import com.litmus7.ui.ReadCsv;
+import com.litmus7.util.ReadCsv;
 import com.litmus7.util.Validate;
 
 
 public class EmployeeManagerService {
+	private EmployeeDao employeeDao = new EmployeeDao();
 	
 	public List<Employee> loadCSV(String filePath) {
     	List<Employee> employees = new ArrayList<>();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        List<String>lines=new ArrayList<>();
-        lines =ReadCsv.readCsv(filePath);
-        for(String line:lines) {
-        	String[] data = line.split(",");
-        	if (Validate.validLength(data) & Validate.validEmpID(data[0]) & Validate.validName(data[1]) & Validate.validEmail(data[3]) 
-            		& Validate.validPhone(data[4]) & Validate.validDate(data[6])) {  			
+        List<String[]>lines=ReadCsv.readCsv(filePath);
+        for(String[] data:lines) {
+        	if (Validate.validEmployeeDetails(data)) {  			
                 continue;
             }
             try {
@@ -48,19 +43,20 @@ public class EmployeeManagerService {
     }
 	
 	
-	public boolean writeDataToDB(String csvPath) {
+	public int writeDataToDB(String csvPath) {
+		int countInsertedEmployees=0;
 		List<Employee> employees = loadCSV(csvPath);
-		try (Connection conn = DataBaseConnection.getConnection()) {
-            
-            for (Employee emp : employees) {
-            	EmployeeDao.insertDataToDb(emp,conn);
-            }
-            return true;
-        } catch (SQLException e) {
-            System.err.println("DB Error: " + e.getMessage());
+		for (Employee employee : employees) {
+			if(employeeDao.employeeExists(employee.getEmployeeId())) {
+				continue;
+			}
+			countInsertedEmployees++;
+        	employeeDao.saveEmployee(employee);
         }
-		return false;
+		return countInsertedEmployees;
 	}
 	
-	
+	public List<Employee> getAllEmployees(){
+		return employeeDao.getAllEmployees();
+	}
 }

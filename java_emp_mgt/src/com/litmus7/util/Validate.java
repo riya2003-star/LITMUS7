@@ -45,5 +45,8 @@ public class Validate {
 		}
 		return true;
 	}
-
+	public static boolean validEmployeeDetails(String[] data){
+		return validLength(data) & validEmpID(data[0]) & validName(data[1]) & validEmail(data[3]) 
+        		& validPhone(data[4]) & validDate(data[6]);
+	}
 }
