@@ -1,16 +1,15 @@
-package com.litmus7.dao;
+package com.litmus7.employeemanager.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.litmus7.constant.Constant;
-import com.litmus7.dto.Employee;
-import com.litmus7.util.DataBaseConnection;
+import com.litmus7.employeemanager.constant.Constant;
+import com.litmus7.employeemanager.dto.Employee;
+import com.litmus7.employeemanager.util.DataBaseConnection;
 
 public class EmployeeDao {
 	public void saveEmployee(Employee employee){
@@ -35,8 +34,8 @@ public class EmployeeDao {
 	public List<Employee> getAllEmployees(){
 		List<Employee>employees = new ArrayList<>();
 		try(Connection conn = DataBaseConnection.getConnection();
-				Statement stmt = conn.createStatement();
-				ResultSet rs=stmt.executeQuery(Constant.GET_EMPLOYEES) ){
+				PreparedStatement stmt = conn.prepareStatement(Constant.GET_EMPLOYEES);
+				ResultSet rs=stmt.executeQuery() ){
 			
 			while (rs.next()) {
 				Employee employee = new Employee(

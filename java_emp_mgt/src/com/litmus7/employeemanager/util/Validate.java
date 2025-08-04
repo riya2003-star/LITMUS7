@@ -1,6 +1,6 @@
-package com.litmus7.util;
+package com.litmus7.employeemanager.util;
 
-import com.litmus7.constant.Constant;
+import com.litmus7.employeemanager.constant.Constant;
 
 public class Validate {
 	public static boolean validLength(String[] data) {

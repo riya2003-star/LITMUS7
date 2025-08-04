@@ -1,4 +1,4 @@
-package com.litmus7.constant;
+package com.litmus7.employeemanager.constant;
 
 public class Constant {
 

@@ -1,4 +1,4 @@
-package com.litmus7.dto;
+package com.litmus7.employeemanager.dto;
 
 import java.sql.Date;
 

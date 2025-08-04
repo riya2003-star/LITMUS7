@@ -1,10 +1,10 @@
-package com.litmus7.controller;
+package com.litmus7.employeemanager.controller;
 
 import java.util.List;
 
-import com.litmus7.dto.Employee;
-import com.litmus7.dto.Response;
-import com.litmus7.service.EmployeeManagerService;
+import com.litmus7.employeemanager.dto.Employee;
+import com.litmus7.employeemanager.dto.Response;
+import com.litmus7.employeemanager.service.EmployeeManagerService;
 
 
 public class EmployeeManagerController {

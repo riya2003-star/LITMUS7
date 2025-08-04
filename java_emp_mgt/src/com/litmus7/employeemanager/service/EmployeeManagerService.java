@@ -1,14 +1,14 @@
-package com.litmus7.service;
+package com.litmus7.employeemanager.service;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.litmus7.dao.EmployeeDao;
-import com.litmus7.dto.Employee;
-import com.litmus7.util.ReadCsv;
-import com.litmus7.util.Validate;
+import com.litmus7.employeemanager.dao.EmployeeDao;
+import com.litmus7.employeemanager.dto.Employee;
+import com.litmus7.employeemanager.util.ReadCsv;
+import com.litmus7.employeemanager.util.Validate;
 
 
 public class EmployeeManagerService {
