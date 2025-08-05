@@ -15,7 +15,7 @@ public class DataBaseConnection {
     static {
         Properties prop = new Properties();
         try {
-        	FileReader reader = new FileReader("C:\\\\Users\\\\johns\\\\eclipse-workspace\\\\my\\\\hi\\\\demo.properties");
+        	FileReader reader = new FileReader("C:\\Users\\johns\\eclipse-workspace\\my\\hi\\demo.properties");
             prop.load(reader);
         } catch (IOException e) {
             e.printStackTrace();
@@ -23,11 +23,6 @@ public class DataBaseConnection {
         URL = prop.getProperty("durl");
         USER = prop.getProperty("duser");
         PASS = prop.getProperty("dpass");
-        try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
     }
 
 	

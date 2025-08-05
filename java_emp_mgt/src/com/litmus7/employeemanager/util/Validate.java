@@ -7,7 +7,7 @@ public class Validate {
 		if (data.length != 8) {
 			return false;
 		}
-		return false;
+		return true;
 	}
 	public static boolean validEmpID(String data) {
 		if (data == null) {
@@ -47,6 +47,6 @@ public class Validate {
 	}
 	public static boolean validEmployeeDetails(String[] data){
 		return validLength(data) & validEmpID(data[0]) & validName(data[1]) & validEmail(data[3]) 
-        		& validPhone(data[4]) & validDate(data[6]);
+        		& validPhone(data[4]) & validSalary(data[6]) & validDate(data[7]);
 	}
 }

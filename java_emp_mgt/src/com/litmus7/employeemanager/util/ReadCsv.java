@@ -7,23 +7,22 @@ import java.util.List;
 import java.util.Scanner;
 
 public class ReadCsv{
-	public static List<String[]> readCsv(String filePath) {
+	public static List<String[]> readCsv(String filePath) throws FileNotFoundException {
 		List<String[]> lines=new ArrayList<>();
-		
-		try (Scanner scanner = new Scanner(new FileReader(filePath))) {
-            int lineNum = 0;
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                lineNum++;
-                if (lineNum == 1) continue; // Skip header
-                String[] datas=line.split(",");
-                lines.add(datas);
-            }
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+		Scanner scanner=null;
+		try {
+			scanner = new Scanner(new FileReader(filePath));
+			int lineNum = 0;
+	        while (scanner.hasNextLine()) {
+	            String line = scanner.nextLine();
+	            lineNum++;
+	            if (lineNum == 1) continue; // Skip header
+	            String[] datas=line.split(",");
+	            lines.add(datas);
+	        }
+		}finally {
+			if(scanner!=null) scanner.close();
 		}
-		
 		return lines;
-		
 	}
 }

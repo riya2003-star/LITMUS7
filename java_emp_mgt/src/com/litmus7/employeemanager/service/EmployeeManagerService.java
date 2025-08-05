@@ -1,5 +1,6 @@
 package com.litmus7.employeemanager.service;
 
+import java.io.FileNotFoundException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -7,6 +8,8 @@ import java.util.List;
 
 import com.litmus7.employeemanager.dao.EmployeeDao;
 import com.litmus7.employeemanager.dto.Employee;
+import com.litmus7.employeemanager.exception.EmployeeDaoException;
+import com.litmus7.employeemanager.exception.EmployeeServiceException;
 import com.litmus7.employeemanager.util.ReadCsv;
 import com.litmus7.employeemanager.util.Validate;
 
@@ -14,15 +17,19 @@ import com.litmus7.employeemanager.util.Validate;
 public class EmployeeManagerService {
 	private EmployeeDao employeeDao = new EmployeeDao();
 	
-	public List<Employee> loadCSV(String filePath) {
+	public List<Employee> loadCSV(String filePath) throws EmployeeServiceException {
     	List<Employee> employees = new ArrayList<>();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        List<String[]>lines=ReadCsv.readCsv(filePath);
+        List<String[]> lines;
+		try {
+			lines = ReadCsv.readCsv(filePath);
+		} catch (FileNotFoundException e) {
+			throw new EmployeeServiceException("Csv file not found",e);
+		}
         for(String[] data:lines) {
-        	if (Validate.validEmployeeDetails(data)) {  			
-                continue;
-            }
-            try {
+        	if (!Validate.validEmployeeDetails(data)) {  			
+        		continue;
+            }try {
                 int empId = Integer.parseInt(data[0].trim());
                 String firstName = data[1].trim();
                 String lastName = data[2].trim();
@@ -36,27 +43,37 @@ public class EmployeeManagerService {
                 Employee emp = new Employee(empId, firstName, lastName, email, phone, department, salary, sqlDate);
                 employees.add(emp);
             } catch (Exception e) {
-                System.err.println("Error in line " + e.getMessage());
+            	throw new EmployeeServiceException("Service layer failed due to invalid employee details");
             }
         }
         return employees;
     }
 	
 	
-	public int writeDataToDB(String csvPath) {
+	public int writeDataToDB(String csvPath) throws EmployeeServiceException  {
 		int countInsertedEmployees=0;
 		List<Employee> employees = loadCSV(csvPath);
 		for (Employee employee : employees) {
-			if(employeeDao.employeeExists(employee.getEmployeeId())) {
-				continue;
+			try {
+				if(employeeDao.employeeExists(employee.getEmployeeId())) {
+					continue;
+				}
+	        	employeeDao.saveEmployee(employee);
+	        	countInsertedEmployees++;
 			}
-			countInsertedEmployees++;
-        	employeeDao.saveEmployee(employee);
+			catch(EmployeeDaoException e) {
+				throw new EmployeeServiceException("Service layer failed to save data to db",e);
+			}
+			
         }
 		return countInsertedEmployees;
 	}
 	
-	public List<Employee> getAllEmployees(){
-		return employeeDao.getAllEmployees();
+	public List<Employee> getAllEmployees() throws EmployeeServiceException{
+		try {
+			return employeeDao.getAllEmployees();
+		} catch (EmployeeDaoException e) {
+			throw new EmployeeServiceException("Service layer failed to fetch all employee details",e);
+		}
 	}
 }

@@ -9,10 +9,11 @@ import java.util.List;
 
 import com.litmus7.employeemanager.constant.Constant;
 import com.litmus7.employeemanager.dto.Employee;
+import com.litmus7.employeemanager.exception.EmployeeDaoException;
 import com.litmus7.employeemanager.util.DataBaseConnection;
 
 public class EmployeeDao {
-	public void saveEmployee(Employee employee){
+	public void saveEmployee(Employee employee) throws EmployeeDaoException{
 		try (Connection conn = DataBaseConnection.getConnection();
 				PreparedStatement insertStmt = conn.prepareStatement(Constant.INSERT_EMPLOYEE)) {
 			
@@ -27,11 +28,11 @@ public class EmployeeDao {
 
             insertStmt.executeUpdate();
 		}catch (SQLException e) {
-			    e.printStackTrace();
+			throw new EmployeeDaoException("DataBase Error while saving an employee",e);
 		}
     }
 	
-	public List<Employee> getAllEmployees(){
+	public List<Employee> getAllEmployees() throws EmployeeDaoException{
 		List<Employee>employees = new ArrayList<>();
 		try(Connection conn = DataBaseConnection.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(Constant.GET_EMPLOYEES);
@@ -53,23 +54,23 @@ public class EmployeeDao {
 	        }
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new EmployeeDaoException("DataBase Error while fetching all the employees",e);
 		}
 		return employees;
 	}
 	
-	public boolean employeeExists(int employeeID) {
+	public boolean employeeExists(int employeeID) throws EmployeeDaoException {
+		boolean employeeExist = false;
 		try (Connection conn = DataBaseConnection.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(Constant.COUNT_EMPLOYEE_ID)){
 			stmt.setInt(1, employeeID);
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
-	            return rs.getInt(1) > 0;
+				employeeExist= rs.getInt(1) > 0;
 	        }
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new EmployeeDaoException("DataBase Error",e);
 		}
-		return false;
+		return employeeExist;
 	}
 }

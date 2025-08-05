@@ -19,16 +19,8 @@ public class Response <T>{
 		this.data=data;
 	}
 
-	public int getStatusCode() {
-	    return statusCode;
-	}
-
-	public String getMessage() {
-	    return message;
-	}
-	
-	public T getData() {
-		return data;
-	}
+	public int getStatusCode() {return statusCode;}
+	public String getMessage() {return message;}
+	public T getData() {return data;}
 
 }
