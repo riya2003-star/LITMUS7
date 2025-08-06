@@ -9,6 +9,8 @@ import java.util.List;
 import com.litmus7.employeemanager.dao.EmployeeDao;
 import com.litmus7.employeemanager.dto.Employee;
 import com.litmus7.employeemanager.exception.EmployeeDaoException;
+import com.litmus7.employeemanager.exception.EmployeeExistException;
+import com.litmus7.employeemanager.exception.EmployeeNotFoundException;
 import com.litmus7.employeemanager.exception.EmployeeServiceException;
 import com.litmus7.employeemanager.util.ReadCsv;
 import com.litmus7.employeemanager.util.Validate;
@@ -77,7 +79,7 @@ public class EmployeeManagerService {
 		}
 	}
 	
-	public Employee getEmployeeById(int employeeId) throws EmployeeServiceException{
+	public Employee getEmployeeById(int employeeId) throws EmployeeServiceException, EmployeeNotFoundException{
 		try {
 			return employeeDao.getEmployeeById(employeeId);
 		} catch (EmployeeDaoException e) {
@@ -85,7 +87,7 @@ public class EmployeeManagerService {
 		}
 	}
 	
-	public void deleteEmployeeById(int employeeId) throws EmployeeServiceException{
+	public void deleteEmployeeById(int employeeId) throws EmployeeServiceException, EmployeeNotFoundException{
 		try {
 			employeeDao.deleteEmployeeById(employeeId);
 		} catch (EmployeeDaoException e) {
@@ -93,7 +95,7 @@ public class EmployeeManagerService {
 		}
 	}
 	
-	public void updateEmployee(Employee employee) throws EmployeeServiceException{
+	public void updateEmployee(Employee employee) throws EmployeeServiceException, EmployeeNotFoundException{
 		if(!Validate.validEmployeeDetails(new String[]{
 			    String.valueOf(employee.getEmployeeId()),
 			    employee.getFirstName(),
@@ -107,13 +109,16 @@ public class EmployeeManagerService {
 			throw new EmployeeServiceException("Service layer failed due to invalid employee details");
 		}
 		try {
+			if(!employeeDao.employeeExists(employee.getEmployeeId())) {
+				throw new EmployeeNotFoundException("Employee with ID " + employee.getEmployeeId() + " not found.");
+			}
 			employeeDao.updateEmployee(employee);
 		} catch (EmployeeDaoException e) {
 			throw new EmployeeServiceException("Service layer failed to update the employee",e);
 		}
 	}
 	
-	public void addEmployee(Employee employee) throws EmployeeServiceException{
+	public void addEmployee(Employee employee) throws EmployeeServiceException, EmployeeExistException{
 		if(!Validate.validEmployeeDetails(new String[]{
 			    String.valueOf(employee.getEmployeeId()),
 			    employee.getFirstName(),
@@ -127,6 +132,9 @@ public class EmployeeManagerService {
 			throw new EmployeeServiceException("Service layer failed due to invalid employee details");
 		}
 		try {
+			if(employeeDao.employeeExists(employee.getEmployeeId())) {
+				throw new EmployeeExistException("Employee with ID " + employee.getEmployeeId() + " already exist.");
+			}
 			employeeDao.saveEmployee(employee);
 		} catch (EmployeeDaoException e) {
 			throw new EmployeeServiceException("Service layer failed to update the employee",e);

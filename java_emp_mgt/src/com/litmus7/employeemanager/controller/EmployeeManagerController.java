@@ -6,9 +6,12 @@ import com.litmus7.employeemanager.constant.MessageConstant;
 import com.litmus7.employeemanager.constant.StatusCode;
 import com.litmus7.employeemanager.dto.Employee;
 import com.litmus7.employeemanager.dto.Response;
+import com.litmus7.employeemanager.exception.EmployeeExistException;
+import com.litmus7.employeemanager.exception.EmployeeNotFoundException;
 import com.litmus7.employeemanager.exception.EmployeeServiceException;
 import com.litmus7.employeemanager.service.EmployeeManagerService;
 import com.litmus7.employeemanager.util.Validate;
+
 
 
 public class EmployeeManagerController {
@@ -53,29 +56,29 @@ public class EmployeeManagerController {
     }
     
     public Response <Employee> getEmployeeById(int employeeId){
-    	Employee employee = null;
 		try {
-			employee = employeeManagerService.getEmployeeById(employeeId);
-		} catch (EmployeeServiceException e) {
+			Employee employee = employeeManagerService.getEmployeeById(employeeId);
+			return new Response<Employee>(StatusCode.SUCCESS,MessageConstant.SUCCESS,employee);
+		}catch (EmployeeNotFoundException e) {
+			return new Response<Employee>(StatusCode.FAILURE,MessageConstant.MISSING_RECORDS);
+		}catch (EmployeeServiceException e) {
 			return new Response<Employee>(StatusCode.FAILURE,MessageConstant.SERVICE_ERROR+e.getMessage());
 		}catch(Exception e){
 			return new Response<Employee>(StatusCode.FAILURE,MessageConstant.SYSTEM_ERROR+e.getMessage());
 		}
-    	if(employee==null) 
-    		return new Response<Employee>(StatusCode.FAILURE,MessageConstant.FAILED);
-    	else
-    		return new Response<Employee>(StatusCode.SUCCESS,MessageConstant.SUCCESS,employee);
     }
     
     public Response <String> deleteEmployeeById(int employeeId){
 		try {
 			employeeManagerService.deleteEmployeeById(employeeId);
-		} catch (EmployeeServiceException e) {
+			return new Response<String>(StatusCode.SUCCESS,MessageConstant.SUCCESS);
+		}catch (EmployeeNotFoundException e) {
+			return new Response<String>(StatusCode.FAILURE,MessageConstant.MISSING_RECORDS);
+		}catch (EmployeeServiceException e) {
 			return new Response<String>(StatusCode.FAILURE,MessageConstant.SERVICE_ERROR+e.getMessage());
 		}catch(Exception e){
 			return new Response<String>(StatusCode.FAILURE,MessageConstant.SYSTEM_ERROR+e.getMessage());
 		}
-    	return new Response<String>(StatusCode.SUCCESS,MessageConstant.SUCCESS);
     }
     
     public Response <String> updateEmployee(Employee employee){
@@ -83,6 +86,8 @@ public class EmployeeManagerController {
     		return new Response<String>(StatusCode.FAILURE,MessageConstant.MISSING_RECORDS);
 		try {
 			employeeManagerService.updateEmployee(employee);
+		}catch (EmployeeNotFoundException e) {
+			return new Response<String>(StatusCode.FAILURE,MessageConstant.MISSING_RECORDS);
 		} catch (EmployeeServiceException e) {
 			return new Response<String>(StatusCode.FAILURE,MessageConstant.SERVICE_ERROR+e.getMessage());
 		}catch(Exception e){
@@ -96,6 +101,8 @@ public class EmployeeManagerController {
     		return new Response<String>(StatusCode.FAILURE,MessageConstant.MISSING_RECORDS);
 		try {
 			employeeManagerService.addEmployee(employee);
+		} catch (EmployeeExistException e) {
+			return new Response<String>(StatusCode.FAILURE,MessageConstant.RECORD_EXIST);
 		} catch (EmployeeServiceException e) {
 			return new Response<String>(StatusCode.FAILURE,MessageConstant.SERVICE_ERROR+e.getMessage());
 		}catch(Exception e){

@@ -10,6 +10,7 @@ import java.util.List;
 import com.litmus7.employeemanager.constant.Constant;
 import com.litmus7.employeemanager.dto.Employee;
 import com.litmus7.employeemanager.exception.EmployeeDaoException;
+import com.litmus7.employeemanager.exception.EmployeeNotFoundException;
 import com.litmus7.employeemanager.util.DataBaseConnection;
 
 public class EmployeeDao {
@@ -59,7 +60,7 @@ public class EmployeeDao {
 		return employees;
 	}
 	
-	public boolean employeeExists(int employeeID) throws EmployeeDaoException {
+	public boolean employeeExists(int employeeID) throws EmployeeDaoException{
 		boolean employeeExist = false;
 		try (Connection conn = DataBaseConnection.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(Constant.COUNT_EMPLOYEE_ID)){
@@ -74,7 +75,7 @@ public class EmployeeDao {
 		return employeeExist;
 	}
 	
-	public Employee getEmployeeById(int employeeId) throws EmployeeDaoException {
+	public Employee getEmployeeById(int employeeId) throws EmployeeDaoException, EmployeeNotFoundException {
 		try (Connection conn = DataBaseConnection.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(Constant.GET_EMPLOYEE_BY_ID)){
 			stmt.setInt(1, employeeId);
@@ -91,20 +92,22 @@ public class EmployeeDao {
 		                rs.getDate("join_date")
 						);
 	        }else {
-	        	return null;
-	        }
+				throw new EmployeeNotFoundException("Employee with ID " + employeeId + " not found.");
+				}
 		} catch (SQLException e) {
 			throw new EmployeeDaoException("DataBase Error",e);
 		}
 	}
 	
-	public void deleteEmployeeById(int employeeId) throws EmployeeDaoException {
+	public void deleteEmployeeById(int employeeId) throws EmployeeDaoException, EmployeeNotFoundException {
 		try (Connection conn = DataBaseConnection.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(Constant.DELETE_EMPLOYEE_BY_ID)){
 			stmt.setInt(1, employeeId);
 			int rowsAffected =stmt.executeUpdate();
 			System.out.println(rowsAffected);
-			
+			if(rowsAffected==0) {
+				throw new EmployeeNotFoundException("Employee with ID " + employeeId + " not found.");
+			}
 		} catch (SQLException e) {
 			throw new EmployeeDaoException("DataBase Error",e);
 		}
