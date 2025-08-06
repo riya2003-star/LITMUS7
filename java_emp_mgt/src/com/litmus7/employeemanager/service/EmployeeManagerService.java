@@ -76,4 +76,60 @@ public class EmployeeManagerService {
 			throw new EmployeeServiceException("Service layer failed to fetch all employee details",e);
 		}
 	}
+	
+	public Employee getEmployeeById(int employeeId) throws EmployeeServiceException{
+		try {
+			return employeeDao.getEmployeeById(employeeId);
+		} catch (EmployeeDaoException e) {
+			throw new EmployeeServiceException("Service layer failed to fetch the employee details",e);
+		}
+	}
+	
+	public void deleteEmployeeById(int employeeId) throws EmployeeServiceException{
+		try {
+			employeeDao.deleteEmployeeById(employeeId);
+		} catch (EmployeeDaoException e) {
+			throw new EmployeeServiceException("Service layer failed to delete the employee",e);
+		}
+	}
+	
+	public void updateEmployee(Employee employee) throws EmployeeServiceException{
+		if(!Validate.validEmployeeDetails(new String[]{
+			    String.valueOf(employee.getEmployeeId()),
+			    employee.getFirstName(),
+			    employee.getLastName(),
+			    employee.getEmail(),
+			    employee.getPhone(),
+			    employee.getDepartment(),
+			    String.valueOf(employee.getSalary()),
+			    String.valueOf(employee.getJoinDate())
+			})) {
+			throw new EmployeeServiceException("Service layer failed due to invalid employee details");
+		}
+		try {
+			employeeDao.updateEmployee(employee);
+		} catch (EmployeeDaoException e) {
+			throw new EmployeeServiceException("Service layer failed to update the employee",e);
+		}
+	}
+	
+	public void addEmployee(Employee employee) throws EmployeeServiceException{
+		if(!Validate.validEmployeeDetails(new String[]{
+			    String.valueOf(employee.getEmployeeId()),
+			    employee.getFirstName(),
+			    employee.getLastName(),
+			    employee.getEmail(),
+			    employee.getPhone(),
+			    employee.getDepartment(),
+			    String.valueOf(employee.getSalary()),
+			    String.valueOf(employee.getJoinDate())
+			})) {
+			throw new EmployeeServiceException("Service layer failed due to invalid employee details");
+		}
+		try {
+			employeeDao.saveEmployee(employee);
+		} catch (EmployeeDaoException e) {
+			throw new EmployeeServiceException("Service layer failed to update the employee",e);
+		}
+	}
 }

@@ -10,8 +10,8 @@ import java.io.FileReader;
 
 public class DataBaseConnection {
 	private static final String URL;
-    private static final String USER;
-    private static final String PASS;
+    private static final String USER_NAME;
+    private static final String PASSWORD;
     static {
         Properties prop = new Properties();
         try {
@@ -20,13 +20,13 @@ public class DataBaseConnection {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        URL = prop.getProperty("durl");
-        USER = prop.getProperty("duser");
-        PASS = prop.getProperty("dpass");
+        URL = prop.getProperty("url");
+        USER_NAME = prop.getProperty("userName");
+        PASSWORD = prop.getProperty("password");
     }
 
 	
 	public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USER, PASS);
+        return DriverManager.getConnection(URL, USER_NAME, PASSWORD);
     }
 }

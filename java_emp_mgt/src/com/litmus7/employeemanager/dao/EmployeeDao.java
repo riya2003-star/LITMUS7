@@ -73,4 +73,58 @@ public class EmployeeDao {
 		}
 		return employeeExist;
 	}
+	
+	public Employee getEmployeeById(int employeeId) throws EmployeeDaoException {
+		try (Connection conn = DataBaseConnection.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(Constant.GET_EMPLOYEE_BY_ID)){
+			stmt.setInt(1, employeeId);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				return new Employee(
+						rs.getInt("emp_id"),
+		                rs.getString("first_name"),
+		                rs.getString("last_name"),
+		                rs.getString("email"),
+		                rs.getString("phone"),
+		                rs.getString("department"),
+		                rs.getDouble("salary"),
+		                rs.getDate("join_date")
+						);
+	        }else {
+	        	return null;
+	        }
+		} catch (SQLException e) {
+			throw new EmployeeDaoException("DataBase Error",e);
+		}
+	}
+	
+	public void deleteEmployeeById(int employeeId) throws EmployeeDaoException {
+		try (Connection conn = DataBaseConnection.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(Constant.DELETE_EMPLOYEE_BY_ID)){
+			stmt.setInt(1, employeeId);
+			int rowsAffected =stmt.executeUpdate();
+			System.out.println(rowsAffected);
+			
+		} catch (SQLException e) {
+			throw new EmployeeDaoException("DataBase Error",e);
+		}
+	}
+	
+	public void updateEmployee(Employee employee) throws EmployeeDaoException {
+		try (Connection conn = DataBaseConnection.getConnection();
+				PreparedStatement stmt = conn.prepareStatement(Constant.UPDATE_EMPLOYEE)){
+			stmt.setString(1, employee.getFirstName());
+			stmt.setString(2, employee.getLastName());
+			stmt.setString(3, employee.getEmail());
+			stmt.setString(4, employee.getPhone());
+			stmt.setString(5, employee.getDepartment());
+			stmt.setDouble(6, employee.getSalary());
+			stmt.setDate(7,employee.getJoinDate());
+			stmt.setInt(8, employee.getEmployeeId());
+			stmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			throw new EmployeeDaoException("DataBase Error",e);
+		}
+	}
 }
