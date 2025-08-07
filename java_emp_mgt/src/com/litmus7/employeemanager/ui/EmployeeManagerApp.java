@@ -2,6 +2,8 @@ package com.litmus7.employeemanager.ui;
 
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.litmus7.employeemanager.constant.StatusCode;
@@ -24,6 +26,8 @@ public class EmployeeManagerApp {
         	System.out.println(response.getMessage());
         }
         
+        System.out.println("------------------------");
+        
         //get all employees from db
         
         Response <List<Employee>> response2= employeeManagerController.getAllEmployees();
@@ -35,6 +39,7 @@ public class EmployeeManagerApp {
             	System.out.println(employee.getEmployeeId()+" "+employee.getFirstName());
             }
         }
+        System.out.println("------------------------");
         
         //fetching employee by id
         
@@ -45,6 +50,7 @@ public class EmployeeManagerApp {
         }else {
         	System.out.println(response3.getData().getFirstName()+" "+response3.getData().getLastName());
         }
+        System.out.println("------------------------");
         
         //deleting employee by id
         
@@ -55,6 +61,7 @@ public class EmployeeManagerApp {
         }else {
         	System.out.println(response4.getMessage());
         }
+        System.out.println("------------------------");
         
         //update an employee
         
@@ -74,6 +81,7 @@ public class EmployeeManagerApp {
         }else {
         	System.out.println(response5.getMessage());
         }
+        System.out.println("------------------------");
         
         //add an employee
         empId = 107;
@@ -92,7 +100,31 @@ public class EmployeeManagerApp {
         }else {
         	System.out.println(response6.getMessage());
         }
+        System.out.println("------------------------");
         
+        //adding employees in batch
+        List<Employee> employeeList = new ArrayList<>();
+        employeeList.add(new Employee(108, "Ivan", "Petrov", "ivan.p@example.com", "9455667788", "R&D", 70000, Date.valueOf("2023-06-14")));
+        employeeList.add(new Employee(109, "Jasmine", "Ahmed", "jasmine.ahmed@example.com", "8788990011", "IT", 47000, Date.valueOf("2023-06-14")));
+        Response<Integer> response7= employeeManagerController.addEmployeesInBatch(employeeList);
+        if(response7.getStatusCode()==StatusCode.FAILURE) {
+        	System.out.println(response7.getMessage());
+        }else {
+        	System.out.println(response7.getMessage());
+        	System.out.println(response7.getData()+ " datas are inserted");
+        }
+        System.out.println("------------------------");
+        
+        //Transfer employees to department
+        
+        List<Integer> employeeIds = Arrays.asList(101, 102, 103); // Example employee IDs
+        String newDepartment = "Marketing";
+        Response<String> response8= employeeManagerController.transferEmployeesToDepartment(employeeIds, newDepartment);
+        if(response8.getStatusCode()==StatusCode.FAILURE) {
+        	System.out.println(response8.getMessage());
+        }else {
+        	System.out.println(response8.getMessage());
+        }
 	}
 
 }

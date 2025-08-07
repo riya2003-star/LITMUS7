@@ -10,7 +10,7 @@ public class Validate {
 		return true;
 	}
 	public static boolean validEmpID(String data) {
-		if (data == null) {
+		if (data == null || Integer.parseInt(data) < 0) {
 			return false;
 		}
 		return true;

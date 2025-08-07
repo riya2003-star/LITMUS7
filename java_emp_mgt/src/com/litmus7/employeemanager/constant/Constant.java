@@ -16,4 +16,5 @@ public class Constant {
     public static final String GET_EMPLOYEE_BY_ID ="SELECT emp_id, first_name, last_name, email, phone, department, salary, join_date FROM employee WHERE emp_id = ?";
     public static final String DELETE_EMPLOYEE_BY_ID ="DELETE FROM employee WHERE emp_id = ?";
     public static final String UPDATE_EMPLOYEE = "UPDATE employee SET first_name = ?, last_name = ?, email = ?, phone = ?, department = ?, salary = ?, join_date = ? WHERE emp_id = ?";
+    public static final String TRANSFER_DEPARTMENT="UPDATE employee SET department = ? WHERE emp_id = ?";
 }

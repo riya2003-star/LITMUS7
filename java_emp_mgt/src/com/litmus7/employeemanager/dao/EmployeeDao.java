@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -130,4 +131,71 @@ public class EmployeeDao {
 			throw new EmployeeDaoException("DataBase Error",e);
 		}
 	}
+	
+	public int addEmployeesInBatch(List<Employee> employeeList) throws EmployeeDaoException{
+		int successCount=0;
+		try (Connection conn = DataBaseConnection.getConnection();
+				PreparedStatement insertStmt = conn.prepareStatement(Constant.INSERT_EMPLOYEE)) {
+			
+			for (Employee emp : employeeList) {
+	            try {
+	            	insertStmt.setInt(1, emp.getEmployeeId());
+	            	insertStmt.setString(2, emp.getFirstName());
+	            	insertStmt.setString(3, emp.getLastName());
+	            	insertStmt.setString(4, emp.getEmail());
+	            	insertStmt.setString(5, emp.getPhone());
+	            	insertStmt.setString(6, emp.getDepartment());
+	            	insertStmt.setDouble(7, emp.getSalary());
+	            	insertStmt.setDate(8, new java.sql.Date(emp.getJoinDate().getTime()));
+	            	insertStmt.addBatch();
+	            } catch (Exception e) {
+	            	//logging
+	            }
+	            }
+			int[] results = insertStmt.executeBatch();
+			for (int result : results) {
+	            if (result == Statement.SUCCESS_NO_INFO || result > 0) {
+	                successCount++;
+	            }
+			}
+		}catch (SQLException e) {
+			throw new EmployeeDaoException("DataBase Error while saving an employee",e);
+		}
+		return successCount;
+    }
+	
+	public void transferEmployeesToDepartment(List<Integer> employeeIds, String newDepartment) throws EmployeeDaoException {
+		Connection conn=null;
+		PreparedStatement pstmt = null;
+	    try  {
+	    	conn = DataBaseConnection.getConnection();
+	        conn.setAutoCommit(false); 
+	        pstmt = conn.prepareStatement(Constant.TRANSFER_DEPARTMENT);
+	        
+	        for (Integer empId : employeeIds) {
+	            pstmt.setString(1, newDepartment);
+	            pstmt.setInt(2, empId);
+	            pstmt.addBatch();
+	        }
+
+	        int[] results = pstmt.executeBatch();
+	        conn.commit(); // Commit if all succeed
+
+	    } catch (SQLException e) {
+	        try {
+	            if(conn !=null) conn.rollback(); 
+	        } catch (SQLException rollbackEx) {
+	            throw new EmployeeDaoException("Rollback failed", rollbackEx);
+	        }
+	        throw new EmployeeDaoException("Failed to transfer employees", e);
+	    }finally {
+	    	try {
+	            if (pstmt != null) pstmt.close();
+	            if (conn != null) conn.close();
+	        } catch (SQLException e) {
+	        	throw new EmployeeDaoException("Unable to close Connection", e);
+	        }
+	    }
+	}
+
 }

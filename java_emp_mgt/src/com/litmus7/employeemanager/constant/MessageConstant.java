@@ -10,4 +10,5 @@ public class MessageConstant {
     public static final String  SYSTEM_ERROR = "System error";
     public static final String MISSING_RECORDS = "No records are found.";
     public static final String RECORD_EXIST = "Already records exist.";
+    public static final String INVALID_INPUT = "Invalid input.";
 }
