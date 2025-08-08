@@ -1,0 +1,18 @@
+2025-08-08 16:28:17 [main] WARN  Validate validDate - Invalid date format: 2011-02-1
+2025-08-08 16:28:17 [main] WARN  EmployeeManagerService loadCSV - Invalid employee details skipped: [105, Manu, Kiran, manu@example.com, 7662697627, , 80000, 2011-02-1]
+2025-08-08 16:28:17 [main] INFO  EmployeeManagerService loadCSV - CSV loaded successfully with 5 valid employees
+2025-08-08 16:28:17 [main] WARN  EmployeeManagerService writeDataToDB - Employee with ID 101 already exists. Skipping.
+2025-08-08 16:28:17 [main] INFO  EmployeeManagerService writeDataToDB - Employee inserted: ID 102
+2025-08-08 16:28:17 [main] WARN  EmployeeManagerService writeDataToDB - Employee with ID 103 already exists. Skipping.
+2025-08-08 16:28:17 [main] WARN  EmployeeManagerService writeDataToDB - Employee with ID 104 already exists. Skipping.
+2025-08-08 16:28:17 [main] WARN  EmployeeManagerService writeDataToDB - Employee with ID 106 already exists. Skipping.
+2025-08-08 16:28:17 [main] INFO  EmployeeManagerService writeDataToDB - Total employees inserted: 1
+2025-08-08 16:28:17 [main] INFO  EmployeeManagerService getAllEmployees - Retrieved 8 employees from DB
+2025-08-08 16:28:17 [main] INFO  EmployeeManagerService getEmployeeById - Employee found: ID 102
+2025-08-08 16:28:17 [main] INFO  EmployeeManagerService deleteEmployeeById - Employee deleted: ID 102
+2025-08-08 16:28:17 [main] WARN  EmployeeManagerService updateEmployee - Employee not found for update: ID 201
+2025-08-08 16:28:17 [main] WARN  EmployeeManagerService addEmployee - Employee already exists: ID 107
+2025-08-08 16:28:17 [main] WARN  EmployeeManagerService addEmployeesInBatch - Duplicate employee in batch. Skipping: ID 108
+2025-08-08 16:28:17 [main] WARN  EmployeeManagerService addEmployeesInBatch - Duplicate employee in batch. Skipping: ID 109
+2025-08-08 16:28:17 [main] WARN  EmployeeManagerService addEmployeesInBatch - No valid employees to insert in batch
+2025-08-08 16:28:17 [main] INFO  EmployeeManagerService transferEmployeesToDepartment - Transferred 3 employees to department Marketing
